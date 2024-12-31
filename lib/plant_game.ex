@@ -1,18 +1,17 @@
 defmodule PlantGame do
+  use Application
+
   @moduledoc """
-  Documentation for `PlantGame`.
+  The main application module for the PlantGame.
   """
 
-  @doc """
-  Hello world.
+  def start(_type, _args) do
+    children = [
+      { Registry, keys: :unique, name: PlantGame.Registry },
+      PlantGame.PlantSupervisor
+    ]
 
-  ## Examples
-
-      iex> PlantGame.hello()
-      :world
-
-  """
-  def hello do
-    :world
+    opts = [strategy: :one_for_one, name: PlantGame.Supervisor]
+    Supervisor.start_link(children, opts)
   end
 end
